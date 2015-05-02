@@ -25,62 +25,92 @@ void startList(List *li){
     li->first->type='H';
     li->first->page=0;
     li->first->sizeProcess=sizeMemory;
+
+	li->last=li->first;
 }
 
-void insert(List *li, int sizeProcess){
-	Node *p;
+void insert(List *li, int sizeNewProcess){
+	Node *p, *aux;
 
-	if(li->last==NULL){
-		p=(Node *)malloc(sizeof(Node));
-		p->type='P';
-		p->page=0;
-		p->sizeProcess=sizeProcess;
-		p->previous=NULL;
+	p=li->first;
 
-		p->next=(Node *)malloc(sizeof(Node));
-		p->next=li->first;
-		p->next->previous=(Node *)malloc(sizeof(Node));
-		p->next->page=p->sizeProcess;
-		p->next->sizeProcess=(li->first->sizeProcess)-sizeProcess;
-		p->next->next=NULL;
-		p->next->previous=p;
+	while(p->type!='H' || p->sizeProcess-p->page<sizeNewProcess){
+		if(p->next==NULL){
+			//Implementar depois
+			printf("Sem memória disponível, deseja reorganizar os processos de memória?");
+			return;
+		}
+		p=p->next;
+	}
 
-		li->first=p;
+	aux=(Node *)malloc(sizeof(Node));
+	aux->type='P';
+	aux->page=p->page;
+	aux->sizeProcess=p->page+sizeNewProcess;
 
-		li->last=(Node *)malloc(sizeof(Node));
-		li->last=p->next;
+	p->page=aux->sizeProcess;
+	aux->next=p;
+
+	if(p->previous==NULL){
+		p->previous=aux;
+
+		li->first=aux;
 
 		return;
 	}
 
-	p=li->first;	
-	
+	p->previous->next=aux;
+	aux->previous=p->previous;
+
+	aux->next=p;
+	p->previous=aux;
+
+	p=li->first;
+
 }
 
 void delete(List *li){
 
 }
 
+void showProcesses(List *li){
+	Node *p;
+
+	p=li->first;
+
+	while(p!=NULL){
+		printf("%c\n", p->type);
+		printf("%d\n", p->page);
+		printf("%d\n\n", p->sizeProcess);
+
+		p=p->next;
+	}
+}
+
 int main(){
 	List *li;
-	int sizeProcess;
+	int sizeProcess=1;
 
 	li=(List *)malloc(sizeof(List));
 
 	startList(li);
 
-	printf("Digite o tamanho do novo processo ");
-	scanf("%d", &sizeProcess);
+	while(sizeProcess){
+		printf("Digite o tamanho do novo processo: ");
+		scanf("%d", &sizeProcess);
+		insert(li, sizeProcess);
 
-	insert(li, sizeProcess);
+		showProcesses(li);
+	}
 
-	printf("%c\n", li->first->type);
+
+	/*printf("%c\n", li->first->type);
 	printf("%d\n", li->first->page);
 	printf("%d\n\n", li->first->sizeProcess);
 
 	printf("%c\n", li->first->next->type);
     printf("%d\n", li->first->next->page);
-    printf("%d\n", li->first->next->sizeProcess);
+    printf("%d\n", li->first->next->sizeProcess);*/
 
 	return 0;
 }
