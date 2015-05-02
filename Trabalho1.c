@@ -55,10 +55,6 @@ void insert(List *li, int sizeProcess){
 
 	p=li->first;	
 	
-	while(p->type!=H || p->sizeProcess<sizeProcess){
-	
-	}
-
 }
 
 void delete(List *li){
