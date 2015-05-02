@@ -18,7 +18,8 @@ typedef struct list List;
 
 void startList(List *li){
 	int sizeMemory;
-	
+
+	printf("Memória total: ");
 	scanf("%d", &sizeMemory);
 
     li->first=(Node *)malloc(sizeof(Node));
@@ -69,8 +70,16 @@ void insert(List *li, int sizeNewProcess){
 
 }
 
-void delete(List *li){
+void close(List *li, int page){
+	Node *p;
 
+	p=li->first;
+
+	while(p->page!=page){
+		p=p->next;
+	}
+	
+	p->type='H';
 }
 
 void showProcesses(List *li){
@@ -87,30 +96,45 @@ void showProcesses(List *li){
 	}
 }
 
+void menu(){
+	printf("\n0 - Sair\n");
+	printf("1 - Inserir processo\n");
+	printf("2 - Encerrar processo\n");
+	printf("3 - Reorganizar processos\n");
+	printf("4 - Mostrar status da memória\n\n");
+}
+
 int main(){
 	List *li;
-	int sizeProcess=1;
+	int sizeProcess, page, option=1;
 
 	li=(List *)malloc(sizeof(List));
 
 	startList(li);
 
-	while(sizeProcess){
-		printf("Digite o tamanho do novo processo: ");
-		scanf("%d", &sizeProcess);
-		insert(li, sizeProcess);
+	while(option){
+		menu();
+		printf("Opção: ");
+		scanf("%d", &option);
 
-		showProcesses(li);
+		switch(option){
+			case 1:
+				printf("Digite o tamanho do novo processo: ");
+				scanf("%d", &sizeProcess);
+				insert(li, sizeProcess);
+			break;
+
+			case 2:
+				printf("Digite a página do processo que deseja encerrar: ");
+				scanf("%d", &page);
+				close(li, page);
+			break;
+
+			case 4:
+				showProcesses(li);
+			break;
+		}
 	}
-
-
-	/*printf("%c\n", li->first->type);
-	printf("%d\n", li->first->page);
-	printf("%d\n\n", li->first->sizeProcess);
-
-	printf("%c\n", li->first->next->type);
-    printf("%d\n", li->first->next->page);
-    printf("%d\n", li->first->next->sizeProcess);*/
 
 	return 0;
 }
