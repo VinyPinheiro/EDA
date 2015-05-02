@@ -3,8 +3,9 @@
 void mountScreen(const char* process_number,const char* free_memory,const char* total_memory)
 {
 	char *aux = malloc(100);
-	try = SDL_Init(SDL_INIT_VIDEO);
+	double free_percent = (convert(free_memory)*1.0/convert(total_memory)*300);
 
+	try = SDL_Init(SDL_INIT_VIDEO);
 	if(try != 0)
 	{
 		return;
@@ -16,7 +17,7 @@ void mountScreen(const char* process_number,const char* free_memory,const char* 
     {
         return;
     }
-	SDL_CreateWindowAndRenderer(400, 300, 0, &window, &renderer);
+	SDL_CreateWindowAndRenderer(400, 400, 0, &window, &renderer);
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	
 	SDL_RenderClear(renderer);
@@ -112,15 +113,56 @@ void mountScreen(const char* process_number,const char* free_memory,const char* 
 	
 	SDL_RenderCopy(renderer, textura, NULL, &destino);
 	SDL_RenderPresent(renderer);
+    free(aux);
     
-	quit = 0;
+    /*Create Surface and draw PERCERNT text*/
+    aux = malloc(100);
+    sprintf(aux,"%.2f",free_percent/3);
+    
+    strcat(aux,"% USADA");
+    
+    s = TTF_RenderUTF8_Blended(font, aux, color);
+    textura = SDL_CreateTextureFromSurface(renderer, s);
+    SDL_FreeSurface(s);
+	
+	destino.x = 80;
+	destino.y = 320;
+	destino.w = s->w;
+	destino.h = s->h;
+	
+	SDL_RenderCopy(renderer, textura, NULL, &destino);
+	SDL_RenderPresent(renderer);
+    free(aux);
     
     /*Close font*/
     TTF_CloseFont(font);
 	
+	/*Create a rect with de 100 percent free*/
 	
+	gtotal = (SDL_Rect*)malloc(sizeof(SDL_Rect));
+	gtotal->x = 50;
+	gtotal->y = 250;
+	gtotal->w = 310;
+	gtotal->h = 60;
+	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+	SDL_RenderFillRect(renderer, gtotal);
+	SDL_RenderPresent(renderer);
+    
+    /*Create a rect with de percent no-free*/
+	
+	gfree = (SDL_Rect*)malloc(sizeof(SDL_Rect));
+	gfree->x = 55;
+	gfree->y = 255;
+	gfree->w = free_percent;
+	gfree->h = 50;
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+	SDL_RenderFillRect(renderer, gfree);
+	SDL_RenderPresent(renderer);
+    
+	quit = 0;
 	while (!quit)
 	{
+		
 		if(SDL_PollEvent( &event ) != 0)
 			if(event.type == SDL_QUIT || (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE))
 				quit = !quit;
@@ -129,7 +171,13 @@ void mountScreen(const char* process_number,const char* free_memory,const char* 
 	SDL_Quit();
 }
 
-int stringtonum()
+int convert(const char *x)
 {
-	
+	int aux=0;
+	unsigned int i, j;
+	for (i = 0, j = strlen(x)-1; i < strlen(x) ; i++, j--)
+	{
+		aux += (x[j]-'0') * pow(10,i);
+	}
+	return aux;
 }

@@ -4,6 +4,6 @@
 
 int main()
 {
-	mountScreen("2020","500", "8000");
+	mountScreen("20","4000", "8000");
 	return 0;
 }
