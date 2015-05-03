@@ -116,6 +116,9 @@ void organizeProcesses(List *li){
 	int sum=0, sizeProcess;
 	Node *p;
 
+	if(li->total_process == 0)
+		return;
+	
 	p=li->first;
 
 	while(p->next!=NULL){
