@@ -78,6 +78,22 @@ void closeProcess(List *li, int page){
 	li->total_process--;
 	li->process_memory -= (p->sizeProcess - p->page);
 	p->type='H';
+
+	if(p->previous!=NULL && p->previous->type=='H'){
+		p->previous->sizeProcess=p->sizeProcess;
+		p->previous->next=p->next;
+		p->next->previous=p->previous;
+		p=p->previous;
+	}
+
+	if(p->next!=NULL &&  p->next->type=='H'){
+		p->sizeProcess=p->next->sizeProcess;
+		p->next=p->next->next;
+		if(p->next!=NULL){
+			p->next->previous=p;
+		}
+		
+	}
 }
 
 void showProcesses(List *li){
