@@ -30,6 +30,11 @@ int main(){
 			case 1:
 				printf("Digite o tamanho do novo processo: ");
 				scanf("%d", &sizeProcess);
+				while(sizeProcess < 1)
+				{
+					printf("Tamanho invalido!\nDigite o tamanho do novo processo: ");
+					scanf("%d", &sizeProcess);
+				}
 				insert(li, sizeProcess);
 			break;
 
