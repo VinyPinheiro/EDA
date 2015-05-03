@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-void mountScreen(const char* process_number,const char* free_memory,const char* total_memory);
+void mountScreen(const char* process_number,const char* process_memory,const char* total_memory);
 int convert(const char *x);
 
 SDL_Window* window; 
