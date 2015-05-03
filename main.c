@@ -3,6 +3,7 @@
 #include "graph.h"
 #include "list.h"
 
+/*draw the option menu*/
 void menu(){
 	printf("\n0 - Sair\n");
 	printf("1 - Inserir processo\n");
@@ -12,6 +13,7 @@ void menu(){
 	printf("5 - Mostrar todos os processos\n\n");
 }
 
+/*Principal function*/
 int main(){
 	char *p=malloc(50),*f=malloc(50),*t=malloc(50);
 	List *li;

@@ -1,5 +1,6 @@
 #include "graph.h"
 
+/*Create a visual interface*/
 void mountScreen(const char* process_number,const char* process_memory,const char* total_memory)
 {
 	char *aux;
@@ -201,7 +202,7 @@ void mountScreen(const char* process_number,const char* process_memory,const cha
     TTF_Quit();
 	SDL_Quit();
 }
-
+/*Convert string to int*/
 int convert(const char *x)
 {
 	int aux=0;

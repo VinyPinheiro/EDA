@@ -1,7 +1,7 @@
 #include "list.h"
 #include "list.h"
 
-/*Inicia a Lista*/
+/*Start the List*/
 void startList(List *li){
 	int sizeMemory;
 
@@ -19,7 +19,7 @@ void startList(List *li){
 	li->last=li->first;
 }
 
-/*Insere um nó na lista*/
+/*Insert a node in the list*/
 void insert(List *li, int sizeNewProcess){
 	Node *p, *aux;
 
@@ -27,7 +27,6 @@ void insert(List *li, int sizeNewProcess){
 
 	while(p->type !='H' || p->sizeProcess-p->page<sizeNewProcess){
 		if(p->next==NULL){
-			/*Implementar depois*/
 			printf("%c", (char)7);
 			printf("\nSem memória disponível. Tente novamente após reorganizar os processos de memória\n");
 			return;
@@ -64,6 +63,7 @@ void insert(List *li, int sizeNewProcess){
 
 }
 
+/*Remove a process from the list*/
 void closeProcess(List *li, int page){
 	Node *p = malloc(sizeof(Node));
 
@@ -98,6 +98,7 @@ void closeProcess(List *li, int page){
 	}
 }
 
+/*Show all process*/
 void showProcesses(List *li){
 	Node *p;
 
@@ -112,6 +113,7 @@ void showProcesses(List *li){
 	}
 }
 
+/*Rearranges the process so that it has no free memory fragments between processes*/
 void organizeProcesses(List *li){
 	int sum=0, sizeProcess;
 	Node *p;
@@ -124,7 +126,7 @@ void organizeProcesses(List *li){
 	while(p->next!=NULL){
 
 		if(p->type=='H'){
-			/*Verificar quando o p->previous for NULL*/
+			/*Check when the p->previous is NULL*/
 
 			if(p->previous==NULL){
 				p=p->next;
