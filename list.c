@@ -1,21 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "list.h"
+#include "list.h"
 
-struct node{
-	char type;
-	int page;
-	int sizeProcess;
-	struct node *next;
-	struct node *previous;
-};
-typedef struct node Node;
-
-struct list{
-	struct node *first;
-	struct node *last;
-};
-typedef struct list List;
-
+/*Inicia a Lista*/
 void startList(List *li){
 	int sizeMemory;
 
@@ -26,18 +12,22 @@ void startList(List *li){
     li->first->type='H';
     li->first->page=0;
     li->first->sizeProcess=sizeMemory;
+    li->total_memory = sizeMemory;
+    li->process_memory = 0;
+    li->total_process = 0;
 
 	li->last=li->first;
 }
 
+/*Insere um nó na lista*/
 void insert(List *li, int sizeNewProcess){
 	Node *p, *aux;
 
 	p=li->first;
 
-	while(p->type!='H' || p->sizeProcess-p->page<sizeNewProcess){
+	while(p->type !='H' || p->sizeProcess-p->page<sizeNewProcess){
 		if(p->next==NULL){
-			//Implementar depois
+			/*Implementar depois*/
 			printf("%c", (char)7);
 			printf("\nSem memória disponível. Tente novamente após reorganizar os processos de memória\n");
 			return;
@@ -71,8 +61,8 @@ void insert(List *li, int sizeNewProcess){
 
 }
 
-void close(List *li, int page){
-	Node *p;
+void closeprocess(List *li, int page){
+	Node *p = malloc(sizeof(Node));
 
 	p=li->first;
 
@@ -106,7 +96,7 @@ void organizeProcesses(List *li){
 	while(p->next!=NULL){
 
 		if(p->type=='H'){
-			//Verificar quando o p->previous for NULL
+			/*Verificar quando o p->previous for NULL*/
 
 			if(p->previous==NULL){
 				p=p->next;
@@ -139,49 +129,3 @@ void organizeProcesses(List *li){
 	
 }
 
-void menu(){
-	printf("\n0 - Sair\n");
-	printf("1 - Inserir processo\n");
-	printf("2 - Encerrar processo\n");
-	printf("3 - Reorganizar processos\n");
-	printf("4 - Mostrar status da memória\n\n");
-}
-
-int main(){
-	List *li;
-	int sizeProcess, page, option=1;
-
-	li=(List *)malloc(sizeof(List));
-
-	startList(li);
-
-	while(option){
-		menu();
-		printf("Opção: ");
-		scanf("%d", &option);
-
-		switch(option){
-			case 1:
-				printf("Digite o tamanho do novo processo: ");
-				scanf("%d", &sizeProcess);
-				insert(li, sizeProcess);
-			break;
-
-			case 2:
-				printf("Digite a página do processo que deseja encerrar: ");
-				scanf("%d", &page);
-				close(li, page);
-			break;
-
-			case 3:
-				organizeProcesses(li);
-			break;
-
-			case 4:
-				showProcesses(li);
-			break;
-		}
-	}
-
-	return 0;
-}

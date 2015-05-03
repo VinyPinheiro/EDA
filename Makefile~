@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -W -Wall -pedantic -ansi -g -O2
-LIBS = -lSDL2 -lSDL2_ttf -lm
+LIBS = -lSDL2 -lSDL2_ttf
 
 SRC = ${wildcard *.c}
 OBJ = ${SRC:.cpp=.o}
