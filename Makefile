@@ -15,7 +15,7 @@ lista: $(OBJ)
 	$(CC) -o $@ $(OBJ) $(LIBS)
 
 clean:
-	@rm -rf *.o
+	@rm -rf *.o lista
 
 dist-clean: clean
-	@rm -rf game
+	@rm -rf lista

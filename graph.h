@@ -20,6 +20,7 @@ SDL_Surface *s;
 SDL_Event event;
 SDL_Rect* gtotal;
 SDL_Rect* gfree;
+SDL_Rect* bord;
 int quit, try;
 
 

@@ -1,9 +1,9 @@
 #include "graph.h"
 
-void mountScreen(const char* process_number,const char* free_memory,const char* total_memory)
+void mountScreen(const char* process_number,const char* process_memory,const char* total_memory)
 {
 	char *aux;
-	double free_percent = (convert(free_memory)*1.0/convert(total_memory)*300);
+	double free_percent = (convert(process_memory)*1.0/convert(total_memory)*300);
 
 	try = SDL_Init(SDL_INIT_VIDEO);
 	
@@ -18,7 +18,7 @@ void mountScreen(const char* process_number,const char* free_memory,const char* 
     {
         return;
     }
-	SDL_CreateWindowAndRenderer(400, 400, 0, &window, &renderer);
+	SDL_CreateWindowAndRenderer(400, 450, 0, &window, &renderer);
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	
 	SDL_RenderClear(renderer);
@@ -79,8 +79,8 @@ void mountScreen(const char* process_number,const char* free_memory,const char* 
 	/*Create Surface and draw second text*/
 	
 	aux = calloc(0,100);
-    strcat(aux, "Memória Livre: ");
-    strcat(aux,free_memory);
+    strcat(aux, "Memória Ocupada: ");
+    strcat(aux,process_memory);
     strcat(aux,"Kb");
     
     s = TTF_RenderUTF8_Blended(font, aux, color);
@@ -99,6 +99,25 @@ void mountScreen(const char* process_number,const char* free_memory,const char* 
 	/*Create Surface and draw third text*/
     
     aux = calloc(0,100);
+    sprintf(aux,"Memória Livre: %.0f",(1-free_percent/300.0)*convert(total_memory));
+    strcat(aux,"Kb");
+    
+    s = TTF_RenderUTF8_Blended(font, aux, color);
+    textura = SDL_CreateTextureFromSurface(renderer, s);
+    SDL_FreeSurface(s);
+	
+	destino.x = 5;
+	destino.y = 180;
+	destino.w = s->w;
+	destino.h = s->h;
+	
+	SDL_RenderCopy(renderer, textura, NULL, &destino);
+	SDL_RenderPresent(renderer);
+    free(aux);
+    
+	/*Create Surface and draw fourd text*/
+    
+    aux = calloc(0,100);
     strcat(aux, "Memória Total: ");
     strcat(aux,total_memory);
     strcat(aux,"Kb");
@@ -108,7 +127,7 @@ void mountScreen(const char* process_number,const char* free_memory,const char* 
     SDL_FreeSurface(s);
 	
 	destino.x = 5;
-	destino.y = 180;
+	destino.y = 240;
 	destino.w = s->w;
 	destino.h = s->h;
 	
@@ -127,7 +146,7 @@ void mountScreen(const char* process_number,const char* free_memory,const char* 
     SDL_FreeSurface(s);
 	
 	destino.x = 80;
-	destino.y = 320;
+	destino.y = 380;
 	destino.w = s->w;
 	destino.h = s->h;
 	
@@ -140,20 +159,31 @@ void mountScreen(const char* process_number,const char* free_memory,const char* 
 	
 	/*Create a rect with de 100 percent free*/
 	
+	bord = (SDL_Rect*)malloc(sizeof(SDL_Rect));
+	bord->x = 50;
+	bord->y = 310;
+	bord->w = 310;
+	bord->h = 60;
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderFillRect(renderer, bord);
+	SDL_RenderPresent(renderer);
+    
+    /*Create a rect with de percent total*/
+	
 	gtotal = (SDL_Rect*)malloc(sizeof(SDL_Rect));
-	gtotal->x = 50;
-	gtotal->y = 250;
-	gtotal->w = 310;
-	gtotal->h = 60;
+	gtotal->x = 55;
+	gtotal->y = 315;
+	gtotal->w = 300;
+	gtotal->h = 50;
 	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 	SDL_RenderFillRect(renderer, gtotal);
 	SDL_RenderPresent(renderer);
-    
-    /*Create a rect with de percent no-free*/
+	
+	/*Create a rect with de percent no-free*/
 	
 	gfree = (SDL_Rect*)malloc(sizeof(SDL_Rect));
 	gfree->x = 55;
-	gfree->y = 255;
+	gfree->y = 315;
 	gfree->w = free_percent;
 	gfree->h = 50;
 	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
