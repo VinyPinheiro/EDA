@@ -102,11 +102,11 @@ void showProcesses(List *li){
 	Node *p;
 
 	p=li->first;
-
+	printf("Tipo\tPonto de Inicio\tTamanho\n");
 	while(p!=NULL){
-		printf("%c\n", p->type);
-		printf("%d\n", p->page);
-		printf("%d\n\n", p->sizeProcess-p->page);
+		printf("%c\t", p->type);
+		printf("%d\t\t", p->page);
+		printf("%d\n", p->sizeProcess-p->page);
 
 		p=p->next;
 	}
