@@ -71,6 +71,8 @@ void closeProcess(List *li, int page){
 
 	while(p->page!=page){
 		p=p->next;
+		if(p == NULL)
+			return;
 	}
 	
 	if(p == NULL || p->type == 'H')
