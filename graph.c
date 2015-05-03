@@ -78,7 +78,7 @@ void mountScreen(const char* process_number,const char* process_memory,const cha
 	
 	/*Create Surface and draw second text*/
 	
-	aux = calloc(0,100);
+	aux = calloc(1,100);
     strcat(aux, "Memória Ocupada: ");
     strcat(aux,process_memory);
     strcat(aux,"Kb");
@@ -117,7 +117,7 @@ void mountScreen(const char* process_number,const char* process_memory,const cha
     
 	/*Create Surface and draw fourd text*/
     
-    aux = calloc(0,100);
+    aux = calloc(1,100);
     strcat(aux, "Memória Total: ");
     strcat(aux,total_memory);
     strcat(aux,"Kb");

@@ -72,8 +72,11 @@ void closeProcess(List *li, int page){
 	while(p->page!=page){
 		p=p->next;
 	}
+	
+	if(p == NULL || p->type == 'H')
+		return;
 	li->total_process--;
-	li->process_memory -= p->sizeProcess;
+	li->process_memory -= (p->sizeProcess - p->page);
 	p->type='H';
 }
 
