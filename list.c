@@ -42,7 +42,10 @@ void insert(List *li, int sizeNewProcess){
 
 	p->page=aux->sizeProcess;
 	aux->next=p;
-
+	
+	li->total_process++;
+	li->process_memory += sizeNewProcess;
+	
 	if(p->previous==NULL){
 		p->previous=aux;
 
@@ -61,7 +64,7 @@ void insert(List *li, int sizeNewProcess){
 
 }
 
-void closeprocess(List *li, int page){
+void closeProcess(List *li, int page){
 	Node *p = malloc(sizeof(Node));
 
 	p=li->first;
@@ -69,7 +72,8 @@ void closeprocess(List *li, int page){
 	while(p->page!=page){
 		p=p->next;
 	}
-	
+	li->total_process--;
+	li->process_memory -= p->sizeProcess;
 	p->type='H';
 }
 

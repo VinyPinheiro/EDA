@@ -35,7 +35,7 @@ int main(){
 			case 2:
 				printf("Digite a página do processo que deseja encerrar: ");
 				scanf("%d", &page);
-				closeprocess(li, page);
+				closeProcess(li, page);
 			break;
 
 			case 3:

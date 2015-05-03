@@ -24,7 +24,7 @@ typedef struct list List;
 
 void startList(List *li);
 void insert(List *li, int sizeNewProcess);
-void closeprocess(List *li, int page);
+void closeProcess(List *li, int page);
 void showProcesses(List *li);
 void organizeProcesses(List *li);
 

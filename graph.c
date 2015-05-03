@@ -2,10 +2,11 @@
 
 void mountScreen(const char* process_number,const char* free_memory,const char* total_memory)
 {
-	char *aux = malloc(100);
+	char *aux;
 	double free_percent = (convert(free_memory)*1.0/convert(total_memory)*300);
 
 	try = SDL_Init(SDL_INIT_VIDEO);
+	
 	if(try != 0)
 	{
 		return;
@@ -58,7 +59,7 @@ void mountScreen(const char* process_number,const char* free_memory,const char* 
     color.a = 255;
 	
     /*Create Surface and draw first text*/
-    
+    aux = calloc(0,100);
     strcat(aux, "Total de processos: ");
     strcat(aux,process_number);
 	TTF_SetFontStyle(font, TTF_STYLE_NORMAL);
@@ -77,7 +78,7 @@ void mountScreen(const char* process_number,const char* free_memory,const char* 
 	
 	/*Create Surface and draw second text*/
 	
-	aux = malloc(100);
+	aux = calloc(0,100);
     strcat(aux, "Memória Livre: ");
     strcat(aux,free_memory);
     strcat(aux,"Kb");
@@ -97,7 +98,7 @@ void mountScreen(const char* process_number,const char* free_memory,const char* 
 	
 	/*Create Surface and draw third text*/
     
-    aux = malloc(100);
+    aux = calloc(0,100);
     strcat(aux, "Memória Total: ");
     strcat(aux,total_memory);
     strcat(aux,"Kb");
