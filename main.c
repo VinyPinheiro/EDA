@@ -8,7 +8,8 @@ void menu(){
 	printf("1 - Inserir processo\n");
 	printf("2 - Encerrar processo\n");
 	printf("3 - Reorganizar processos\n");
-	printf("4 - Mostrar status da memória\n\n");
+	printf("4 - Mostrar status da memória\n");
+	printf("5 - Mostrar todos os processos\n\n");
 }
 
 int main(){
@@ -47,6 +48,10 @@ int main(){
 				sprintf(t,"%.0f",li->total_memory);
 				sprintf(f,"%.0f",li->process_memory);
 				mountScreen(p,f, t);
+			break;
+
+			case 5:
+				showProcesses(li);
 			break;
 		}
 	}

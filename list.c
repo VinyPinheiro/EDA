@@ -85,7 +85,7 @@ void showProcesses(List *li){
 	while(p!=NULL){
 		printf("%c\n", p->type);
 		printf("%d\n", p->page);
-		printf("%d\n\n", p->sizeProcess);
+		printf("%d\n\n", p->sizeProcess-p->page);
 
 		p=p->next;
 	}
