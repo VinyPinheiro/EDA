@@ -12,54 +12,78 @@ void startList(List *li){
     li->first->type='H';
     li->first->page=0;
     li->first->sizeProcess=sizeMemory;
-    li->total_memory = sizeMemory;
+
+	li->last=(Node *)malloc(sizeof(Node));
+    li->last->type='H';
+    li->last->page=0;
+    li->last->sizeProcess=sizeMemory;
+
+	li->total_memory = sizeMemory;
     li->process_memory = 0;
     li->total_process = 0;
 
-	li->last=li->first;
+	li->first->previous=li->last;
+	li->last->next=li->first;
 }
 
 /*Insert a node in the list*/
 void insert(List *li, int sizeNewProcess){
 	Node *p, *aux;
 
+	/*Verify if there is just one node in the list*/
+	if(li->first->page==li->last->page){
+		if(sizeNewProcess>li->total_memory){
+			printf("Não há memória suficiente para adicionar esse processo\n");
+			return;
+		}
+		
+		li->first->type='P';
+		li->first->page=0;
+		li->first->sizeProcess=sizeNewProcess;
+		
+		li->last->type='H';
+		li->last->page=sizeNewProcess;
+		li->last->sizeProcess=li->total_memory;
+		
+		li->first->next=li->last;
+		li->first->previous=li->last;
+		
+		li->last->previous=li->first;
+		li->last->next=li->first;
+		
+		li->total_process++;
+	 	li->process_memory += sizeNewProcess;
+	 	
+	 	return;
+	}
 	p=li->first;
-
+	
 	while(p->type !='H' || p->sizeProcess-p->page<sizeNewProcess){
-		if(p->next==NULL){
+		if(p->next==li->first){
 			printf("%c", (char)7);
 			printf("\nSem memória disponível. Tente novamente após reorganizar os processos de memória\n");
 			return;
 		}
 		p=p->next;
 	}
-
+	
 	aux=(Node *)malloc(sizeof(Node));
 	aux->type='P';
 	aux->page=p->page;
 	aux->sizeProcess=p->page+sizeNewProcess;
-
+	
 	p->page=aux->sizeProcess;
 	aux->next=p;
 	
-	li->total_process++;
-	li->process_memory += sizeNewProcess;
-	
-	if(p->previous==NULL){
-		p->previous=aux;
-
-		li->first=aux;
-
-		return;
-	}
-
 	p->previous->next=aux;
 	aux->previous=p->previous;
 
 	aux->next=p;
 	p->previous=aux;
 
-	p=li->first;
+	
+	li->total_process++;
+	li->process_memory += sizeNewProcess;
 
 }
 
@@ -98,18 +122,22 @@ void closeProcess(List *li, int page){
 	}
 }
 
-/*Show all process*/
+/*Show all processes*/
 void showProcesses(List *li){
 	Node *p;
+	int i;
 
 	p=li->first;
 	printf("Tipo\tPonto de Inicio\tTamanho\n");
-	while(p!=NULL){
+
+	while(1){
 		printf("%c\t", p->type);
 		printf("%d\t\t", p->page);
 		printf("%d\n", p->sizeProcess-p->page);
 
 		p=p->next;
+		
+		if(p==li->first) break;
 	}
 }
 
