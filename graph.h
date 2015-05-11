@@ -9,6 +9,9 @@
 
 void mountScreen(const char* process_number,const char* process_memory,const char* total_memory);
 int convert(const char *x);
+void writeText(int posx, int posy, char *text);
+void drawpercent(double percent);
+void drawrect(SDL_Rect *rect, int x, int y, int w, int h, int r, int g, int b, int a);
 
 SDL_Window* window; 
 SDL_Renderer *renderer;
@@ -22,6 +25,5 @@ SDL_Rect* gtotal;
 SDL_Rect* gfree;
 SDL_Rect* bord;
 int quit, try;
-
 
 #endif

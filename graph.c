@@ -40,18 +40,8 @@ void mountScreen(const char* process_number,const char* process_memory,const cha
 	TTF_SetFontStyle(font, TTF_STYLE_BOLD);
 	TTF_SetFontStyle(font, TTF_STYLE_ITALIC);
 	TTF_SetFontStyle(font, TTF_STYLE_UNDERLINE);
-    s = TTF_RenderUTF8_Blended(font, "Relatório da Memória", color);
-    textura = SDL_CreateTextureFromSurface(renderer, s);
-    SDL_FreeSurface(s);
 	
-	destino.x = 60;
-	destino.y = 5;
-	destino.w = s->w;
-	destino.h = s->h;
-	
-	SDL_RenderCopy(renderer, textura, NULL, &destino);
-	SDL_RenderPresent(renderer);
-	
+	writeText(60,5,"Relatório da Memória");
 	
 	/*Define color font*/
     color.r = 0;
@@ -63,19 +53,12 @@ void mountScreen(const char* process_number,const char* process_memory,const cha
     aux = calloc(0,100);
     strcat(aux, "Total de processos: ");
     strcat(aux,process_number);
+	
 	TTF_SetFontStyle(font, TTF_STYLE_NORMAL);
-    s = TTF_RenderUTF8_Blended(font, aux, color);
-    textura = SDL_CreateTextureFromSurface(renderer, s);
-    SDL_FreeSurface(s);
+    
+    writeText(5,65,aux);
 	
-	destino.x = 5;
-	destino.y = 65;
-	destino.w = s->w;
-	destino.h = s->h;
-	
-	SDL_RenderCopy(renderer, textura, NULL, &destino);
-	SDL_RenderPresent(renderer);
-	free(aux);
+    free(aux);
 	
 	/*Create Surface and draw second text*/
 	
@@ -84,17 +67,8 @@ void mountScreen(const char* process_number,const char* process_memory,const cha
     strcat(aux,process_memory);
     strcat(aux,"Kb");
     
-    s = TTF_RenderUTF8_Blended(font, aux, color);
-    textura = SDL_CreateTextureFromSurface(renderer, s);
-    SDL_FreeSurface(s);
-	
-	destino.x = 5;
-	destino.y = 120;
-	destino.w = s->w;
-	destino.h = s->h;
-	
-	SDL_RenderCopy(renderer, textura, NULL, &destino);
-	SDL_RenderPresent(renderer);
+    writeText(5,120,aux);
+    
 	free(aux);
 	
 	/*Create Surface and draw third text*/
@@ -103,17 +77,8 @@ void mountScreen(const char* process_number,const char* process_memory,const cha
     sprintf(aux,"Memória Livre: %.0f",(1-free_percent/300.0)*convert(total_memory));
     strcat(aux,"Kb");
     
-    s = TTF_RenderUTF8_Blended(font, aux, color);
-    textura = SDL_CreateTextureFromSurface(renderer, s);
-    SDL_FreeSurface(s);
-	
-	destino.x = 5;
-	destino.y = 180;
-	destino.w = s->w;
-	destino.h = s->h;
-	
-	SDL_RenderCopy(renderer, textura, NULL, &destino);
-	SDL_RenderPresent(renderer);
+    writeText(5,180,aux);
+    
     free(aux);
     
 	/*Create Surface and draw fourd text*/
@@ -123,17 +88,8 @@ void mountScreen(const char* process_number,const char* process_memory,const cha
     strcat(aux,total_memory);
     strcat(aux,"Kb");
     
-    s = TTF_RenderUTF8_Blended(font, aux, color);
-    textura = SDL_CreateTextureFromSurface(renderer, s);
-    SDL_FreeSurface(s);
-	
-	destino.x = 5;
-	destino.y = 240;
-	destino.w = s->w;
-	destino.h = s->h;
-	
-	SDL_RenderCopy(renderer, textura, NULL, &destino);
-	SDL_RenderPresent(renderer);
+    writeText(5,240,aux);
+    
     free(aux);
     
     /*Create Surface and draw PERCERNT text*/
@@ -142,55 +98,16 @@ void mountScreen(const char* process_number,const char* process_memory,const cha
     
     strcat(aux,"% USADA");
     
-    s = TTF_RenderUTF8_Blended(font, aux, color);
-    textura = SDL_CreateTextureFromSurface(renderer, s);
-    SDL_FreeSurface(s);
-	
-	destino.x = 80;
-	destino.y = 380;
-	destino.w = s->w;
-	destino.h = s->h;
-	
-	SDL_RenderCopy(renderer, textura, NULL, &destino);
-	SDL_RenderPresent(renderer);
+    writeText(80,380,aux);
+    
     free(aux);
     
     /*Close font*/
     TTF_CloseFont(font);
 	
-	/*Create a rect with de 100 percent free*/
+	/*Draw de percent bar*/
+	drawpercent(free_percent);	
 	
-	bord = (SDL_Rect*)malloc(sizeof(SDL_Rect));
-	bord->x = 50;
-	bord->y = 310;
-	bord->w = 310;
-	bord->h = 60;
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	SDL_RenderFillRect(renderer, bord);
-	SDL_RenderPresent(renderer);
-    
-    /*Create a rect with de percent total*/
-	
-	gtotal = (SDL_Rect*)malloc(sizeof(SDL_Rect));
-	gtotal->x = 55;
-	gtotal->y = 315;
-	gtotal->w = 300;
-	gtotal->h = 50;
-	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-	SDL_RenderFillRect(renderer, gtotal);
-	SDL_RenderPresent(renderer);
-	
-	/*Create a rect with de percent no-free*/
-	
-	gfree = (SDL_Rect*)malloc(sizeof(SDL_Rect));
-	gfree->x = 55;
-	gfree->y = 315;
-	gfree->w = free_percent;
-	gfree->h = 50;
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-	SDL_RenderFillRect(renderer, gfree);
-	SDL_RenderPresent(renderer);
-    
 	quit = 0;
 	while (!quit)
 	{
@@ -202,6 +119,7 @@ void mountScreen(const char* process_number,const char* process_memory,const cha
     TTF_Quit();
 	SDL_Quit();
 }
+
 /*Convert string to int*/
 int convert(const char *x)
 {
@@ -212,4 +130,52 @@ int convert(const char *x)
 		aux += (x[j]-'0') * pow(10,i);
 	}
 	return aux;
+}
+
+/*Write text in the surface*/
+void writeText(int posx, int posy, char *text)
+{
+	s = TTF_RenderUTF8_Blended(font, text, color);
+    textura = SDL_CreateTextureFromSurface(renderer, s);
+    SDL_FreeSurface(s);
+	
+	destino.x = posx;
+	destino.y = posy;
+	destino.w = s->w;
+	destino.h = s->h;
+	
+	SDL_RenderCopy(renderer, textura, NULL, &destino);
+	SDL_RenderPresent(renderer);
+	
+}
+
+/*Draw percent*/
+void drawpercent(double percent)
+{
+	/*Create a rect with de 100 percent free*/
+	
+	bord = (SDL_Rect*)malloc(sizeof(SDL_Rect));
+	drawrect(bord, 50, 310, 310,60, 0,0,0,255);
+    
+    /*Create a rect with de percent total*/
+	
+	gtotal = (SDL_Rect*)malloc(sizeof(SDL_Rect));
+	drawrect(gtotal, 55, 315, 300,50, 0,0,255,255);
+	
+	/*Create a rect with de percent no-free*/
+	
+	gfree = (SDL_Rect*)malloc(sizeof(SDL_Rect));
+	drawrect(gfree, 55, 315, percent,50, 255,0,0,255);
+
+}
+
+void drawrect(SDL_Rect *rect, int x, int y, int w, int h, int r, int g, int b, int a)
+{
+	rect->x = x;
+	rect->y = y;
+	rect->w = w;
+	rect->h = h;
+	SDL_SetRenderDrawColor(renderer, r, g, b, a);
+	SDL_RenderFillRect(renderer, rect);
+	SDL_RenderPresent(renderer);
 }
