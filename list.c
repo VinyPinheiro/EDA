@@ -36,18 +36,20 @@ void insert(List *li, int sizeNewProcess){
 			printf("Não há memória suficiente para adicionar esse processo\n");
 			return;
 		}
+
+		if(li->first==li->last) li->last=(Node *)malloc(sizeof(Node));
 		
 		li->first->type='P';
 		li->first->page=0;
 		li->first->sizeProcess=sizeNewProcess;
-		
+	
 		li->last->type='H';
 		li->last->page=sizeNewProcess;
 		li->last->sizeProcess=li->total_memory;
-		
+
 		li->first->next=li->last;
 		li->first->previous=li->last;
-		
+
 		li->last->previous=li->first;
 		li->last->next=li->first;
 		
@@ -89,37 +91,67 @@ void insert(List *li, int sizeNewProcess){
 
 /*Remove a process from the list*/
 void closeProcess(List *li, int page){
-	Node *p = malloc(sizeof(Node));
+	int aux;
+	Node *p = malloc(sizeof(Node)), *auxFree;
 
 	p=li->first;
 
 	while(p->page!=page){
 		p=p->next;
-		if(p == NULL)
+		if(p == li->first){
+			printf("Página inválida\n");
 			return;
+		}
 	}
 	
-	if(p == NULL || p->type == 'H')
+	if(p->type == 'H'){
+		printf("Página inválida\n");
 		return;
+	}
+		
 	li->total_process--;
 	li->process_memory -= (p->sizeProcess - p->page);
 	p->type='H';
 
-	if(p->previous!=NULL && p->previous->type=='H'){
-		p->previous->sizeProcess=p->sizeProcess;
-		p->previous->next=p->next;
-		p->next->previous=p->previous;
-		p=p->previous;
+	if(p->previous->type=='H'){
+		if(p->previous!=li->last){
+			auxFree=p;
+			p->previous->sizeProcess=p->sizeProcess;
+			p->previous->next=p->next;
+			p->next->previous=p->previous;
+			p=p->previous;
+			free(auxFree);
+		}else{
+			aux=p->sizeProcess;
+			while(p->next!=li->first){
+				p->page-=aux;
+				p->sizeProcess-=aux;
+				p=p->next;
+			}
+			p->page-=aux;
+		
+			auxFree=li->first;
+			li->first=li->first->next;
+			li->first->previous=li->last;
+			li->last->next=li->first;
+			li->last->previous=li->first;
+			free(auxFree);
+		}
 	}
 
-	if(p->next!=NULL &&  p->next->type=='H'){
+
+	if(p->next->type=='H' && p->next!=li->first){
+		auxFree=p->next;
 		p->sizeProcess=p->next->sizeProcess;
 		p->next=p->next->next;
 		if(p->next!=NULL){
 			p->next->previous=p;
 		}
-		
+		free(auxFree);
 	}
+
+	li->last=li->last->previous;
+
 }
 
 /*Show all processes*/
