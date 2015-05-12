@@ -190,17 +190,14 @@ void showProcesses(List *li){
 
 		p=p->next;
 		
-		getchar();
-
-
 		if(p==li->first) break;
 	}
 }
 
 /*Rearranges the process so that it has no free memory fragments between processes*/
 void organizeProcesses(List *li){
-	int sum=0, sizeProcess;
-	Node *p;
+	int sizeProcess;
+	Node *p, *auxFree, *aux;
 
 	if(li->total_process == 0)
 		return;
@@ -208,48 +205,27 @@ void organizeProcesses(List *li){
 	p=li->first;
 
 	while(p->next!=li->first){
+		aux=p;
 
 		if(p->type=='H'){
-			/*Check when the p->previous is NULL*/
-
-			if(p->previous==NULL){
-				p=p->next;
-				p->sizeProcess=p->sizeProcess - p->page;
-				p->page=0;
-				p->previous=NULL;
-
-				li->first=p;
-
-				p=p->next;
-
-				continue;
-			}
-			
-			sizeProcess=p->next->sizeProcess - p->next->page;
-	
-			p->next->page=p->previous->sizeProcess;
-			p->next->sizeProcess=p->next->page + sizeProcess;
-
+			sizeProcess=p->sizeProcess-p->page;
+			auxFree=p;
 			p->previous->next=p->next;
 			p->next->previous=p->previous;
+			p=p->next;
+			aux=p;
+			free(auxFree);
+			while(p->next!=li->first){
+				p->page-=sizeProcess;
+				p->sizeProcess-=sizeProcess;
+				p=p->next;
+			}
+			li->last->page-=sizeProcess;
 		}
-		
+
+		p=aux;	
 		p=p->next;
 	}
 
-	p->type='H';
-	p->page=p->previous->sizeProcess;
-	p->next=NULL;
-
-	li->last=li->last->next;
-	li->last->next=li->first;
-	li->first->previous=li->last;
-
-	printf("%d\n", li->last->page);
-	printf("%d\n", li->last->sizeProcess);
-
-	printf("\n%d\n", li->last->next->page);
-	 printf("\n%d\n", li->last->next->sizeProcess);
-	
 }
 
