@@ -191,15 +191,13 @@ void showProcesses(List *li){
 		return;
 	}
 
-	while(1){
+	do{
 		printf("%c\t", p->type);
 		printf("%d\t\t", p->page);
 		printf("%d\n", p->sizeProcess-p->page);
-
 		p=p->next;
-		
-		if(p==li->first) break;
-	}
+	}while(p!=li->first);
+
 }
 
 /*Rearranges the process so that it has no free memory fragments between processes*/
