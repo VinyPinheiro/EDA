@@ -184,6 +184,13 @@ void showProcesses(List *li){
 	p=li->first;
 	printf("Tipo\tPonto de Inicio\tTamanho\n");
 
+	if(li->first->page==li->last->page){
+		printf("%c\t", li->first->type);
+		printf("%d\t\t", li->first->page);
+		printf("%d\n", li->first->sizeProcess-p->page);
+		return;
+	}
+
 	while(1){
 		printf("%c\t", p->type);
 		printf("%d\t\t", p->page);
