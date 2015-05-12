@@ -9,15 +9,14 @@ void saveFile(List *lst, char *caminho)
 	
 	p=lst->first;
 
-	while(1){
+	do{
 		fprintf(arq,"%c ", p->type);
 		fprintf(arq,"%d ", p->page);
 		fprintf(arq,"%d\n", p->sizeProcess);
 
 		p=p->next;
 		
-		if(p==lst->first) break;
-	}
+		}while(p != lst->first);
 	fclose(arq);
 }
 

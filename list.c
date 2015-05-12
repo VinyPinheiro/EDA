@@ -9,21 +9,19 @@ void startList(List *li){
 	scanf("%d", &sizeMemory);
 
     li->first=(Node *)malloc(sizeof(Node));
+    
+    li->last = li->first;
+    
     li->first->type='H';
     li->first->page=0;
     li->first->sizeProcess=sizeMemory;
-
-	li->last=(Node *)malloc(sizeof(Node));
-    li->last->type='H';
-    li->last->page=0;
-    li->last->sizeProcess=sizeMemory;
+	li->first->previous=li->first;
+	li->first->next=li->first;
+	
 
 	li->total_memory = sizeMemory;
     li->process_memory = 0;
     li->total_process = 0;
-
-	li->first->previous=li->last;
-	li->last->next=li->first;
 }
 
 /*Insert a node in the list*/
@@ -183,13 +181,6 @@ void showProcesses(List *li){
 
 	p=li->first;
 	printf("Tipo\tPonto de Inicio\tTamanho\n");
-
-	if(li->first->page==li->last->page){
-		printf("%c\t", li->first->type);
-		printf("%d\t\t", li->first->page);
-		printf("%d\n", li->first->sizeProcess-p->page);
-		return;
-	}
 
 	do{
 		printf("%c\t", p->type);
