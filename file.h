@@ -7,6 +7,7 @@
 
 void saveFile(List *lst, char *caminho);
 List *loadFile(char *caminho);
+void addnode(char type, int page, int end, List *lst, int inserts);
 
 FILE *arq;
 

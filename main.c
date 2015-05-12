@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "graph.h"
 #include "list.h"
+#include "file.h"
 
 /*draw the option menu*/
 void menu(){
@@ -20,10 +21,19 @@ int main(){
 	List *li;
 	int sizeProcess, page, option=1;
 
-	li=(List *)malloc(sizeof(List));
 
-	startList(li);
+	printf("Deseja abrir um  arquivo?\n1-Sim\n2-Nao\n");
+	scanf("%d", &option);
+	
+	if(option == 1)
+		li = loadFile("process.prc");
+	else
+	{
+		li=(List *)malloc(sizeof(List));
 
+		startList(li);	
+	}
+	
 	while(option){
 		menu();
 		printf("Opção: ");

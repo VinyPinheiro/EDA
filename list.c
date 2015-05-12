@@ -37,7 +37,8 @@ void insert(List *li, int sizeNewProcess){
 			return;
 		}
 
-		if(li->first==li->last) li->last=(Node *)malloc(sizeof(Node));
+		if(li->first==li->last) 
+		li->last=(Node *)malloc(sizeof(Node));
 		
 		li->first->type='P';
 		li->first->page=0;
