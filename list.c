@@ -83,6 +83,16 @@ void insert(List *li, int sizeNewProcess){
 	aux->next=p;
 	p->previous=aux;
 
+	if( (li->last->page - li->last->sizeProcess)==0 ){
+		aux=li->last;
+
+		li->last->previous->next=li->last->next;
+		li->first->previous=li->last->previous;
+
+		li->last=li->last->previous;
+
+		free(aux);
+	}
 	
 	li->total_process++;
 	li->process_memory += sizeNewProcess;
@@ -114,14 +124,8 @@ void closeProcess(List *li, int page){
 	p->type='H';
 
 	if(p->previous->type=='H'){
-		if(p->previous!=li->last){
-			auxFree=p;
-			p->previous->sizeProcess=p->sizeProcess;
-			p->previous->next=p->next;
-			p->next->previous=p->previous;
-			p=p->previous;
-			free(auxFree);
-		}else{
+		if(p==li->first){
+			auxFree=li->first;
 			aux=p->sizeProcess;
 			while(p->next!=li->first){
 				p->page-=aux;
@@ -129,28 +133,45 @@ void closeProcess(List *li, int page){
 				p=p->next;
 			}
 			p->page-=aux;
-		
-			auxFree=li->first;
 			li->first=li->first->next;
 			li->first->previous=li->last;
 			li->last->next=li->first;
-			li->last->previous=li->first;
+			free(auxFree);
+			return;
+		}else{
+			auxFree=p;
+			p->previous->sizeProcess=p->sizeProcess;
+			p->previous->next=p->next;
+			p->next->previous=p->previous;
+			free(auxFree);
+
+			p=p->previous;
+		}
+	}
+
+	if(p->next->type=='H'){
+		if(p==li->last){
+			p=li->first;
+			auxFree=li->first;
+			aux=p->sizeProcess;
+			while(p->next!=li->first){
+				p->page-=aux;
+				p->sizeProcess-=aux;
+				p=p->next;
+			}
+			p->page-=aux;
+			li->first=li->first->next;
+			li->first->previous=li->last;
+			li->last->next=li->first;
+			free(auxFree);
+		}else{
+			auxFree=p;
+			p->next->page=p->page;
+			p->next->previous=p->previous;
+			p->previous->next=p->next;
 			free(auxFree);
 		}
 	}
-
-
-	if(p->next->type=='H' && p->next!=li->first){
-		auxFree=p->next;
-		p->sizeProcess=p->next->sizeProcess;
-		p->next=p->next->next;
-		if(p->next!=NULL){
-			p->next->previous=p;
-		}
-		free(auxFree);
-	}
-
-	li->last=li->last->previous;
 
 }
 
@@ -169,6 +190,9 @@ void showProcesses(List *li){
 
 		p=p->next;
 		
+		getchar();
+
+
 		if(p==li->first) break;
 	}
 }
@@ -183,7 +207,7 @@ void organizeProcesses(List *li){
 	
 	p=li->first;
 
-	while(p->next!=NULL){
+	while(p->next!=li->first){
 
 		if(p->type=='H'){
 			/*Check when the p->previous is NULL*/
@@ -216,6 +240,16 @@ void organizeProcesses(List *li){
 	p->type='H';
 	p->page=p->previous->sizeProcess;
 	p->next=NULL;
+
+	li->last=li->last->next;
+	li->last->next=li->first;
+	li->first->previous=li->last;
+
+	printf("%d\n", li->last->page);
+	printf("%d\n", li->last->sizeProcess);
+
+	printf("\n%d\n", li->last->next->page);
+	 printf("\n%d\n", li->last->next->sizeProcess);
 	
 }
 
