@@ -10,7 +10,8 @@ void menu(){
 	printf("2 - Encerrar processo\n");
 	printf("3 - Reorganizar processos\n");
 	printf("4 - Mostrar status da memória\n");
-	printf("5 - Mostrar todos os processos\n\n");
+	printf("5 - Mostrar todos os processos\n");
+	printf("6 - Salvar Status\n\n");
 }
 
 /*Principal function*/
@@ -60,6 +61,10 @@ int main(){
 			case 5:
 				showProcesses(li);
 			break;
+			case 6:
+				saveFile(li,"process.prc");
+				printf("Arquivo com nome de process.prc\n");
+				
 		}
 	}
 	return 0;
